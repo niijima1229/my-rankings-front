@@ -1,0 +1,41 @@
+name: Deploy Prod
+on:
+  push:
+    branches:
+      - main
+env:
+  ENV_NAME: prod
+  ROLE_TO_ASSUME: arn:aws:iam::196189526378:role/my-rankings-github-actions
+  FRONT_BACKET_NAME: my-rankings
+  CLOUDFRONT_ID: E3S697WR6966T2
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ env.ROLE_TO_ASSUME }}
+          role-session-name: github-actions-${{ github.run_id }}
+          aws-region: ap-northeast-1
+
+      - name: Get AWS Account
+        run: aws sts get-caller-identity
+
+      - name: Build
+        run: |
+          cp .env.${{ env.ENV_NAME }} .env
+          rm .env.prod
+          yarn install
+          yarn build
+      - name: Deploy
+        run: |
+          aws s3 sync ./build/ s3://${{ env.FRONT_BACKET_NAME }}/ --delete --exact-timestamps
+          aws cloudfront create-invalidation --distribution-id ${{ env.CLOUDFRONT_ID }} --paths "/*"
