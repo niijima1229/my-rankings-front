@@ -1,7 +1,14 @@
-import LogoImg from "assets/logo.webp";
+import { FC } from 'react'
+import LogoImg from 'assets/logo.webp'
 
-export default function Logo() {
-  return (
-    <img style={{ width: "40px", height: "40px" }} src={LogoImg} alt="ロゴ" />
-  );
+const Logo: FC = () => {
+    return (
+        <img
+            style={{ width: '40px', height: '40px' }}
+            src={LogoImg}
+            alt="ロゴ"
+        />
+    )
 }
+
+export default Logo
