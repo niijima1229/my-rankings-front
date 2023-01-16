@@ -16,6 +16,7 @@ import Typography from '@mui/material/Typography'
 import SidebarListItem from 'components/SidebarListItem'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Home from 'pages/Home'
+import { grey } from '@mui/material/colors'
 
 const drawerWidth = 240
 
@@ -46,7 +47,7 @@ const App: FC = () => {
     ]
 
     const drawer = (
-        <>
+        <Box sx={{ height: '100vh', background: grey[100] }}>
             <Toolbar>
                 <Logo />
             </Toolbar>
@@ -60,11 +61,11 @@ const App: FC = () => {
                     ></SidebarListItem>
                 ))}
             </List>
-        </>
+        </Box>
     )
 
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex', height: '100vh', background: grey[100] }}>
             <CssBaseline />
             <AppBar
                 color="inherit"
@@ -72,6 +73,7 @@ const App: FC = () => {
                 sx={{
                     width: { sm: `calc(100% - ${drawerWidth}px)` },
                     ml: { sm: `${drawerWidth}px` },
+                    background: grey[100],
                 }}
             >
                 <Toolbar>
