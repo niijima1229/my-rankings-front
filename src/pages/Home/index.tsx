@@ -1,7 +1,26 @@
-import { FC } from 'react'
+import { FC, useState, useEffect } from 'react'
 import Typography from '@mui/material/Typography'
+import axios from 'axios'
+import Config from 'config'
 
 const Home: FC = () => {
+    const [rankings, setRankings] = useState([])
+    useEffect(() => {
+        const getRankings: any = async () => {
+            const url = Config.apiUrl + '/rankings'
+            await axios
+                .get(url)
+                .then((response) => {
+                    setRankings(response.data[0])
+                    console.log(rankings)
+                })
+                .catch(() => {
+                    console.log('エラーです！')
+                })
+        }
+        getRankings()
+    }, [])
+
     return (
         <>
             <Typography paragraph>
