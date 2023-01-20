@@ -16,6 +16,7 @@ import Typography from '@mui/material/Typography'
 import SidebarListItem from 'components/SidebarListItem'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Home from 'pages/Home'
+import Login from 'pages/Login'
 import { grey } from '@mui/material/colors'
 
 const drawerWidth = 240
@@ -142,6 +143,7 @@ const App: FC = () => {
                 <Router>
                     <Routes>
                         <Route path="/" element={<Home />}></Route>
+                        <Route path="/login" element={<Login />}></Route>
                     </Routes>
                 </Router>
             </Box>
