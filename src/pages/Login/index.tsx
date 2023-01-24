@@ -11,15 +11,31 @@ import {
 } from '@mui/material'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import { FC, FormEvent } from 'react'
+import axios from 'axios'
+import Config from 'config'
 
 const Login: FC = () => {
     const handleSubmit: any = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         const data = new FormData(event.currentTarget)
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        })
+        const url = Config.apiUrl + '/login'
+        axios
+            .post(url, {
+                email: data.get('email'),
+                password: data.get('password'),
+            })
+            .then((response) => {
+                localStorage.setItem('token', response.data.authorization.token)
+            })
+            .catch((error) => {
+                if (error.response.status === 401) {
+                    alert('入力していただいたユーザーは存在しません')
+                } else if (error.response.status === 422) {
+                    alert('入力形式に誤りがあります')
+                } else {
+                    alert('予期せぬエラーが発生しました')
+                }
+            })
     }
     return (
         <Container component="main" maxWidth="xs">
