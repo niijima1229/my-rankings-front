@@ -18,7 +18,7 @@ const Login: FC = () => {
     const handleSubmit: any = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         const data = new FormData(event.currentTarget)
-        const url = Config.apiUrl + '/login'
+        const url = Config.apiLoginUrl + '/login'
         axios
             .post(url, {
                 email: data.get('email'),
