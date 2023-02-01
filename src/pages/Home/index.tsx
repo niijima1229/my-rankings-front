@@ -3,15 +3,34 @@ import Typography from '@mui/material/Typography'
 import axios from 'axios'
 import Config from 'config'
 
+interface User {
+    id: number
+    name: string
+}
+
+interface RankingItem {
+    id: number
+    name: string
+    rank: number
+    score: number
+}
+
+interface Ranking {
+    id: number
+    title: string
+    user: User
+    rankingItems: RankingItem[]
+}
+
 const Home: FC = () => {
-    const [rankings, setRankings] = useState([])
+    const [rankings, setRankings] = useState<Ranking[]>([])
     useEffect(() => {
         const getRankings: any = async () => {
             const url = Config.apiUrl + '/rankings'
             await axios
                 .get(url)
                 .then((response) => {
-                    setRankings(response.data[0])
+                    setRankings(response.data)
                     console.log(rankings)
                 })
                 .catch(() => {
