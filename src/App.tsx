@@ -32,18 +32,22 @@ const App: FC = () => {
         {
             text: 'ホーム',
             icon: <HomeIcon />,
+            link: '/',
         },
         {
             text: '審査',
             icon: <GavelIcon />,
+            link: '/judge',
         },
         {
             text: 'ランキング管理',
             icon: <LeaderboardIcon />,
+            link: '/ranking-admin',
         },
         {
             text: 'プロフィール',
             icon: <AccountCircleIcon />,
+            link: '/profile',
         },
     ]
 
@@ -59,6 +63,7 @@ const App: FC = () => {
                         key={item.text}
                         text={item.text}
                         icon={item.icon}
+                        link={item.link}
                     ></SidebarListItem>
                 ))}
             </List>

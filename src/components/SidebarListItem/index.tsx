@@ -7,16 +7,19 @@ import ListItemText from '@mui/material/ListItemText'
 interface Props {
     text: string
     icon: JSX.Element
+    link: string
 }
 
-const SidebarListItem: FC<Props> = ({ text, icon }) => {
+const SidebarListItem: FC<Props> = ({ text, icon, link }) => {
     return (
-        <ListItem disablePadding>
-            <ListItemButton>
-                <ListItemIcon>{icon}</ListItemIcon>
-                <ListItemText primary={text} />
-            </ListItemButton>
-        </ListItem>
+        <a href={link}>
+            <ListItem disablePadding>
+                <ListItemButton>
+                    <ListItemIcon>{icon}</ListItemIcon>
+                    <ListItemText primary={text} />
+                </ListItemButton>
+            </ListItem>
+        </a>
     )
 }
 
