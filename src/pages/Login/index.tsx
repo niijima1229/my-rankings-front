@@ -10,21 +10,33 @@ import {
     Link,
 } from '@mui/material'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
-import { FC, FormEvent } from 'react'
+import { FC } from 'react'
 import axios from 'axios'
 import Config from 'config'
+import { useForm, SubmitHandler } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
+import { ErrorMessage } from '@hookform/error-message'
+
+interface FormInputs {
+    email: string
+    password: string
+    apiError: string
+}
 
 const Login: FC = () => {
     const navigate = useNavigate()
-    const handleSubmit: any = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault()
-        const data = new FormData(event.currentTarget)
+    const {
+        register,
+        handleSubmit,
+        setError,
+        formState: { errors },
+    } = useForm<FormInputs>()
+    const onSubmit: SubmitHandler<FormInputs> = (data) => {
         const url = Config.apiLoginUrl + '/login'
         axios
             .post(url, {
-                email: data.get('email'),
-                password: data.get('password'),
+                email: data.email,
+                password: data.password,
             })
             .then((response) => {
                 localStorage.setItem('token', response.data.authorization.token)
@@ -32,11 +44,20 @@ const Login: FC = () => {
             })
             .catch((error) => {
                 if (error.response.status === 401) {
-                    alert('入力していただいたユーザーは存在しません')
+                    setError('apiError', {
+                        type: 'auth',
+                        message: '入力していただいたユーザーは存在しません',
+                    })
                 } else if (error.response.status === 422) {
-                    alert('入力形式に誤りがあります')
+                    setError('apiError', {
+                        type: 'auth',
+                        message: '入力形式に誤りがあります',
+                    })
                 } else {
-                    alert('予期せぬエラーが発生しました')
+                    setError('apiError', {
+                        type: 'auth',
+                        message: '予期せぬエラーが発生しました',
+                    })
                 }
             })
     }
@@ -59,29 +80,53 @@ const Login: FC = () => {
                 </Typography>
                 <Box
                     component="form"
-                    onSubmit={handleSubmit}
+                    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                    onSubmit={handleSubmit(onSubmit)}
                     noValidate
                     sx={{ mt: 1 }}
                 >
+                    <ErrorMessage
+                        errors={errors}
+                        name="apiError"
+                        render={({ message }) => (
+                            <Typography sx={{ color: 'red' }}>
+                                {message}
+                            </Typography>
+                        )}
+                    />
                     <TextField
                         margin="normal"
-                        required
                         fullWidth
                         id="email"
                         label="メールアドレス"
-                        name="email"
                         autoComplete="email"
+                        error={errors.email != null}
+                        helperText={errors.email?.message}
                         autoFocus
+                        {...register('email', {
+                            required: '必須項目です',
+                            pattern: {
+                                value: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                                message:
+                                    'メールアドレスの入力形式が正しくありません。',
+                            },
+                        })}
                     />
                     <TextField
                         margin="normal"
                         required
                         fullWidth
-                        name="password"
                         label="パスワード"
                         type="password"
                         id="password"
                         autoComplete="current-password"
+                        {...register('password', {
+                            required: '必須項目です',
+                            min: {
+                                value: 6,
+                                message: 'パスワードは６文字以上です',
+                            },
+                        })}
                     />
                     {/* ユーザーのログイン情報保存機能実装時に解除 */}
                     {/* <FormControlLabel
