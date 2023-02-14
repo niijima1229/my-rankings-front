@@ -13,8 +13,10 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import { FC, FormEvent } from 'react'
 import axios from 'axios'
 import Config from 'config'
+import { useNavigate } from 'react-router-dom'
 
 const Login: FC = () => {
+    const navigate = useNavigate()
     const handleSubmit: any = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         const data = new FormData(event.currentTarget)
@@ -26,6 +28,7 @@ const Login: FC = () => {
             })
             .then((response) => {
                 localStorage.setItem('token', response.data.authorization.token)
+                navigate('/')
             })
             .catch((error) => {
                 if (error.response.status === 401) {
