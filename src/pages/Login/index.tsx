@@ -15,10 +15,12 @@ import axios from 'axios'
 import Config from 'config'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
+import { ErrorMessage } from '@hookform/error-message'
 
-interface FormInput {
+interface FormInputs {
     email: string
     password: string
+    apiError: string
 }
 
 const Login: FC = () => {
@@ -26,9 +28,10 @@ const Login: FC = () => {
     const {
         register,
         handleSubmit,
+        setError,
         formState: { errors },
-    } = useForm<FormInput>()
-    const onSubmit: SubmitHandler<FormInput> = (data) => {
+    } = useForm<FormInputs>()
+    const onSubmit: SubmitHandler<FormInputs> = (data) => {
         const url = Config.apiLoginUrl + '/login'
         axios
             .post(url, {
@@ -41,11 +44,20 @@ const Login: FC = () => {
             })
             .catch((error) => {
                 if (error.response.status === 401) {
-                    alert('入力していただいたユーザーは存在しません')
+                    setError('apiError', {
+                        type: 'auth',
+                        message: '入力していただいたユーザーは存在しません',
+                    })
                 } else if (error.response.status === 422) {
-                    alert('入力形式に誤りがあります')
+                    setError('apiError', {
+                        type: 'auth',
+                        message: '入力形式に誤りがあります',
+                    })
                 } else {
-                    alert('予期せぬエラーが発生しました')
+                    setError('apiError', {
+                        type: 'auth',
+                        message: '予期せぬエラーが発生しました',
+                    })
                 }
             })
     }
@@ -73,6 +85,15 @@ const Login: FC = () => {
                     noValidate
                     sx={{ mt: 1 }}
                 >
+                    <ErrorMessage
+                        errors={errors}
+                        name="apiError"
+                        render={({ message }) => (
+                            <Typography sx={{ color: 'red' }}>
+                                {message}
+                            </Typography>
+                        )}
+                    />
                     <TextField
                         margin="normal"
                         fullWidth
