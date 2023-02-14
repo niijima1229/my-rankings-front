@@ -14,6 +14,7 @@ import { FC } from 'react'
 import axios from 'axios'
 import Config from 'config'
 import { useForm, SubmitHandler } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 
 interface FormInput {
     email: string
@@ -21,6 +22,7 @@ interface FormInput {
 }
 
 const Login: FC = () => {
+    const navigate = useNavigate()
     const {
         register,
         handleSubmit,
@@ -35,6 +37,7 @@ const Login: FC = () => {
             })
             .then((response) => {
                 localStorage.setItem('token', response.data.authorization.token)
+                navigate('/')
             })
             .catch((error) => {
                 if (error.response.status === 401) {
