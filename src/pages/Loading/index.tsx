@@ -9,6 +9,7 @@ const CircularIndeterminate: FC = () => {
                 display: 'flex',
                 justifyContent: 'center',
                 height: '100vh',
+                pt: 3,
             }}
         >
             <CircularProgress />

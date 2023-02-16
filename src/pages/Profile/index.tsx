@@ -1,15 +1,15 @@
-import { FC, useState, useEffect } from 'react'
 import axios from 'axios'
-import Config from 'config'
-import { Ranking } from 'types/ranking'
 import Rankings from 'components/Rankings'
+import Config from 'config'
+import { FC, useEffect, useState } from 'react'
+import { Ranking } from 'types/ranking'
 
-const Home: FC = () => {
+const Profile: FC = () => {
     const [rankings, setRankings] = useState<Ranking[]>([])
 
     useEffect(() => {
         const getRankings: any = async () => {
-            const url = Config.apiUrl + '/rankings'
+            const url = Config.apiUrl + '/my-rankings'
             await axios
                 .get(url)
                 .then((response) => {
@@ -22,6 +22,11 @@ const Home: FC = () => {
         getRankings()
     }, [])
 
-    return <Rankings rankings={rankings} />
+    return (
+        <>
+            <Rankings rankings={rankings} />
+        </>
+    )
 }
-export default Home
+
+export default Profile

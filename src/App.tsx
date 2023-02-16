@@ -17,8 +17,8 @@ import SidebarListItem from 'components/SidebarListItem'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Home from 'pages/Home'
 import Login from 'pages/Login'
-import { grey } from '@mui/material/colors'
 import AuthGuard from 'providers/AuthGuard'
+import Profile from 'pages/Profile'
 
 const drawerWidth = 240
 
@@ -53,7 +53,7 @@ const App: FC = () => {
     ]
 
     const drawer = (
-        <Box sx={{ height: '100vh', background: grey[100] }}>
+        <Box sx={{ height: '100vh' }}>
             <Toolbar>
                 <Logo />
             </Toolbar>
@@ -72,7 +72,7 @@ const App: FC = () => {
     )
 
     return (
-        <Box sx={{ display: 'flex', height: '100vh', background: grey[100] }}>
+        <Box sx={{ display: 'flex', height: '100vh' }}>
             <CssBaseline />
             <AppBar
                 color="inherit"
@@ -80,7 +80,7 @@ const App: FC = () => {
                 sx={{
                     width: { sm: `calc(100% - ${drawerWidth}px)` },
                     ml: { sm: `${drawerWidth}px` },
-                    background: grey[100],
+                    boxShadow: 'none',
                 }}
             >
                 <Toolbar>
@@ -100,6 +100,7 @@ const App: FC = () => {
                         My Rankings
                     </Typography>
                 </Toolbar>
+                <Divider />
             </AppBar>
             <Box
                 component="nav"
@@ -141,7 +142,6 @@ const App: FC = () => {
                 component="main"
                 sx={{
                     flexGrow: 1,
-                    p: 3,
                     width: { sm: `calc(100% - ${drawerWidth}px)` },
                 }}
             >
@@ -150,11 +150,15 @@ const App: FC = () => {
                     <Routes>
                         <Route path="/" element={<Home />}></Route>
                         <Route path="/profile" element={<AuthGuard />}>
-                            <Route path="/profile" element={<Home />}></Route>
+                            <Route
+                                path="/profile"
+                                element={<Profile />}
+                            ></Route>
                         </Route>
                         <Route path="/login" element={<Login />}></Route>
                     </Routes>
                 </Router>
+                <Divider orientation="vertical" flexItem></Divider>
             </Box>
         </Box>
     )
