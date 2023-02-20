@@ -18,7 +18,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Home from 'pages/Home'
 import Login from 'pages/Login'
 import AuthGuard from 'providers/AuthGuard'
-import Profile from 'pages/Profile'
+import MyPage from 'pages/MyPage'
 
 const drawerWidth = 240
 
@@ -46,9 +46,9 @@ const App: FC = () => {
             link: '/ranking-admin',
         },
         {
-            text: 'プロフィール',
+            text: 'マイページ',
             icon: <AccountCircleIcon />,
-            link: '/profile',
+            link: '/my-page',
         },
     ]
 
@@ -149,11 +149,8 @@ const App: FC = () => {
                 <Router>
                     <Routes>
                         <Route path="/" element={<Home />}></Route>
-                        <Route path="/profile" element={<AuthGuard />}>
-                            <Route
-                                path="/profile"
-                                element={<Profile />}
-                            ></Route>
+                        <Route path="/my-page" element={<AuthGuard />}>
+                            <Route path="/my-page" element={<MyPage />}></Route>
                         </Route>
                         <Route path="/login" element={<Login />}></Route>
                     </Routes>

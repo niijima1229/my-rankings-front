@@ -4,7 +4,7 @@ import Config from 'config'
 import { FC, useEffect, useState } from 'react'
 import { Ranking } from 'types/ranking'
 
-const Profile: FC = () => {
+const MyPage: FC = () => {
     const [rankings, setRankings] = useState<Ranking[]>([])
 
     useEffect(() => {
@@ -29,4 +29,4 @@ const Profile: FC = () => {
     )
 }
 
-export default Profile
+export default MyPage
