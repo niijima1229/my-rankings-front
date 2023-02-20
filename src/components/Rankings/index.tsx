@@ -16,6 +16,7 @@ const Rankings: FC<Props> = ({ rankings }) => {
             sx={{
                 width: { sm: '50%' },
                 minHeight: '100vh',
+                borderLeft: 'solid 1px rgba(0, 0, 0, 0.12)',
                 borderRight: 'solid 1px rgba(0, 0, 0, 0.12)',
             }}
         >
