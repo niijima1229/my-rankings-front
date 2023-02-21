@@ -13,11 +13,9 @@ import {
 import { red, grey } from '@mui/material/colors'
 import dayjs from 'dayjs'
 import { Ranking } from 'types/ranking'
+import { useGetInitial } from 'hooks/initial'
 
 const RankingCard: FC<Ranking> = ({ title, user, createdAt, rankingItems }) => {
-    function userInitial(name: string): string {
-        return name.charAt(0)
-    }
     return (
         <Card
             sx={{
@@ -28,8 +26,8 @@ const RankingCard: FC<Ranking> = ({ title, user, createdAt, rankingItems }) => {
         >
             <CardHeader
                 avatar={
-                    <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                        {userInitial(user.name)}
+                    <Avatar sx={{ bgcolor: red[500] }}>
+                        {useGetInitial(user.name)}
                     </Avatar>
                 }
                 title={title}

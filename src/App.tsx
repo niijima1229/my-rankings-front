@@ -19,6 +19,7 @@ import Home from 'pages/Home'
 import Login from 'pages/Login'
 import AuthGuard from 'providers/AuthGuard'
 import MyPage from 'pages/MyPage'
+import RankingAdmin from 'pages/RankingAdmin'
 
 const drawerWidth = 240
 
@@ -149,6 +150,12 @@ const App: FC = () => {
                 <Router>
                     <Routes>
                         <Route path="/" element={<Home />}></Route>
+                        <Route path="/ranking-admin" element={<AuthGuard />}>
+                            <Route
+                                path="/ranking-admin"
+                                element={<RankingAdmin />}
+                            ></Route>
+                        </Route>
                         <Route path="/my-page" element={<AuthGuard />}>
                             <Route path="/my-page" element={<MyPage />}></Route>
                         </Route>

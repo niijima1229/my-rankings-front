@@ -40,6 +40,7 @@ const Login: FC = () => {
             })
             .then((response) => {
                 localStorage.setItem('token', response.data.authorization.token)
+                localStorage.setItem('user', JSON.stringify(response.data.user))
                 navigate('/')
             })
             .catch((error) => {
