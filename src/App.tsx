@@ -20,6 +20,7 @@ import Login from 'pages/Login'
 import AuthGuard from 'providers/AuthGuard'
 import MyPage from 'pages/MyPage'
 import RankingAdmin from 'pages/RankingAdmin'
+import SignUp from 'pages/SignUp'
 
 const drawerWidth = 240
 
@@ -160,6 +161,7 @@ const App: FC = () => {
                             <Route path="/my-page" element={<MyPage />}></Route>
                         </Route>
                         <Route path="/login" element={<Login />}></Route>
+                        <Route path="/sign-up" element={<SignUp />}></Route>
                     </Routes>
                 </Router>
                 <Divider orientation="vertical" flexItem></Divider>

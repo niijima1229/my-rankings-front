@@ -1,3 +1,4 @@
+import { ErrorMessage } from '@hookform/error-message'
 import {
     Container,
     CssBaseline,
@@ -6,24 +7,24 @@ import {
     Typography,
     TextField,
     Button,
-    Grid,
     Link,
 } from '@mui/material'
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
-import { FC } from 'react'
 import axios from 'axios'
 import Config from 'config'
+import { FC } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import { ErrorMessage } from '@hookform/error-message'
+import Logo from 'components/Logo'
+import { deepOrange } from '@mui/material/colors'
 
 interface FormInputs {
+    name: string
     email: string
     password: string
     apiError: string
 }
 
-const Login: FC = () => {
+const SignUp: FC = () => {
     const navigate = useNavigate()
     const {
         register,
@@ -32,9 +33,10 @@ const Login: FC = () => {
         formState: { errors },
     } = useForm<FormInputs>()
     const onSubmit: SubmitHandler<FormInputs> = (data) => {
-        const url = Config.apiLoginUrl + '/login'
+        const url = Config.apiLoginUrl + '/register'
         axios
             .post(url, {
+                name: data.name,
                 email: data.email,
                 password: data.password,
             })
@@ -44,12 +46,7 @@ const Login: FC = () => {
                 navigate('/')
             })
             .catch((error) => {
-                if (error.response.status === 401) {
-                    setError('apiError', {
-                        type: 'auth',
-                        message: '入力していただいたユーザーは存在しません',
-                    })
-                } else if (error.response.status === 422) {
+                if (error.response.status === 422) {
                     setError('apiError', {
                         type: 'auth',
                         message: '入力形式に誤りがあります',
@@ -73,11 +70,11 @@ const Login: FC = () => {
                     alignItems: 'center',
                 }}
             >
-                <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                    <LockOutlinedIcon />
+                <Avatar sx={{ m: 1, bgcolor: deepOrange[500] }}>
+                    <Logo />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Sign in
+                    Sign up
                 </Typography>
                 <Box
                     component="form"
@@ -97,13 +94,25 @@ const Login: FC = () => {
                     />
                     <TextField
                         margin="normal"
+                        required
+                        fullWidth
+                        label="ユーザー名"
+                        type="name"
+                        id="name"
+                        autoFocus
+                        autoComplete="current-name"
+                        {...register('name', {
+                            required: '必須項目です',
+                        })}
+                    />
+                    <TextField
+                        margin="normal"
                         fullWidth
                         id="email"
                         label="メールアドレス"
                         autoComplete="email"
                         error={errors.email != null}
                         helperText={errors.email?.message}
-                        autoFocus
                         {...register('email', {
                             required: '必須項目です',
                             pattern: {
@@ -129,36 +138,23 @@ const Login: FC = () => {
                             },
                         })}
                     />
-                    {/* ユーザーのログイン情報保存機能実装時に解除 */}
-                    {/* <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
-                        label="Remember me"
-                    /> */}
                     <Button
                         type="submit"
                         fullWidth
                         variant="contained"
                         sx={{ mt: 3, mb: 2 }}
                     >
-                        Sign In
+                        Sign Up
                     </Button>
-                    <Grid container>
-                        {/* パスワードリセット機能実装時に解除 */}
-                        {/* <Grid item xs>
-                            <Link href="#" variant="body2">
-                                Forgot password?
-                            </Link>
-                        </Grid> */}
-                        <Grid item>
-                            <Link href="/sign-up" variant="body2">
-                                {"Don't have an account? Sign Up"}
-                            </Link>
-                        </Grid>
-                    </Grid>
+                    <Box>
+                        <Link href="/login" variant="body2">
+                            {'If you already have an account. Sign In'}
+                        </Link>
+                    </Box>
                 </Box>
             </Box>
         </Container>
     )
 }
 
-export default Login
+export default SignUp
