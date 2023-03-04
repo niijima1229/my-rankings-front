@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -21,11 +21,48 @@ import AuthGuard from 'providers/AuthGuard'
 import MyPage from 'pages/MyPage'
 import RankingAdmin from 'pages/RankingAdmin'
 import SignUp from 'pages/SignUp'
+import {
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    TextField,
+    DialogActions,
+    Button,
+    SpeedDial,
+} from '@mui/material'
+import EditIcon from '@mui/icons-material/Edit'
+import { useForm } from 'react-hook-form'
+import axios from 'axios'
+import Config from 'config'
+import useAuth from 'hooks/auth'
+
+interface FormInputs {
+    title: string
+    rankingItem: string[]
+}
 
 const drawerWidth = 240
 
 const App: FC = () => {
+    const [isAuthenticated, setIsAuthenticated] = useState(false)
+    useEffect(() => {
+        const fetchAuth: any = async () => {
+            const response = await useAuth()
+            setIsAuthenticated(response)
+        }
+
+        fetchAuth()
+    }, [])
     const [mobileOpen, setMobileOpen] = useState(false)
+    const [open, setOpen] = React.useState(false)
+
+    const handleClickOpen: any = () => {
+        setOpen(true)
+    }
+
+    const handleClose: any = () => {
+        setOpen(false)
+    }
 
     const handleDrawerToggle: any = () => {
         setMobileOpen(!mobileOpen)
@@ -54,6 +91,41 @@ const App: FC = () => {
         },
     ]
 
+    const [isFormSubmitted, setIsFormSubmitted] = useState(false)
+    const {
+        register,
+        handleSubmit,
+        formState: { isValid },
+    } = useForm<FormInputs>({
+        mode: 'onChange',
+        defaultValues: {
+            title: '',
+            rankingItem: ['', '', ''],
+        },
+    })
+
+    const onSubmit: any = (data: FormInputs) => {
+        const url = Config.apiUrl + '/ranking/create'
+        axios
+            .post(url, {
+                title: data.title,
+                rankingItem: data.rankingItem,
+            })
+            .then(() => {
+                window.location.href = '/'
+            })
+            .catch((error) => {
+                if (error.response.status === 401) {
+                    alert('ユーザーが存在しません')
+                } else if (error.response.status === 422) {
+                    alert('入力形式に誤りがあります')
+                } else {
+                    alert('予期せぬエラーが発生しました')
+                }
+            })
+        setIsFormSubmitted(true)
+    }
+
     const drawer = (
         <Box sx={{ height: '100vh' }}>
             <Toolbar>
@@ -69,6 +141,18 @@ const App: FC = () => {
                         link={item.link}
                     ></SidebarListItem>
                 ))}
+                <Button
+                    variant="contained"
+                    sx={{
+                        mx: 'auto',
+                        display: isAuthenticated ? 'block' : 'none',
+                        width: '80%',
+                        borderRadius: 50,
+                    }}
+                    onClick={handleClickOpen}
+                >
+                    作成する
+                </Button>
             </List>
         </Box>
     )
@@ -166,6 +250,82 @@ const App: FC = () => {
                 </Router>
                 <Divider orientation="vertical" flexItem></Divider>
             </Box>
+
+            <SpeedDial
+                ariaLabel="display form"
+                sx={{
+                    position: 'absolute',
+                    bottom: 16,
+                    right: 16,
+                    display: isAuthenticated
+                        ? { xs: 'block', sm: 'none' }
+                        : 'none',
+                }}
+                onClick={handleClickOpen}
+                icon={<EditIcon />}
+            />
+            <Dialog open={open} onClose={handleClose}>
+                <form
+                    action="post"
+                    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                    onSubmit={handleSubmit(onSubmit)}
+                >
+                    <DialogTitle>ランキング作成</DialogTitle>
+                    <DialogContent>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="title"
+                            label="タイトル"
+                            type="text"
+                            fullWidth
+                            variant="standard"
+                            {...register('title', { required: true })}
+                        />
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="rankingItem1"
+                            label="１位"
+                            type="text"
+                            fullWidth
+                            variant="standard"
+                            {...register('rankingItem.0', { required: true })}
+                        />
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="rankingItem2"
+                            label="２位"
+                            type="text"
+                            fullWidth
+                            variant="standard"
+                            {...register('rankingItem.1', { required: true })}
+                        />
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="rankingItem3"
+                            label="３位"
+                            type="text"
+                            fullWidth
+                            variant="standard"
+                            {...register('rankingItem.2', { required: true })}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose}>Cancel</Button>
+                        <Button
+                            type="submit"
+                            disabled={
+                                isFormSubmitted || !isValid || !isAuthenticated
+                            }
+                        >
+                            Subscribe
+                        </Button>
+                    </DialogActions>
+                </form>
+            </Dialog>
         </Box>
     )
 }
