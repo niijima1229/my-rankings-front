@@ -314,14 +314,14 @@ const App: FC = () => {
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClose}>Cancel</Button>
+                        <Button onClick={handleClose}>キャンセル</Button>
                         <Button
                             type="submit"
                             disabled={
                                 isFormSubmitted || !isValid || !isAuthenticated
                             }
                         >
-                            Subscribe
+                            作成
                         </Button>
                     </DialogActions>
                 </form>
