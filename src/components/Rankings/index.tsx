@@ -27,7 +27,7 @@ const Rankings: FC<Props> = ({ rankings }) => {
                         title={ranking.title}
                         user={ranking.user}
                         createdAt={ranking.createdAt}
-                        rankingItems={ranking.rankingItems}
+                        ranking_items={ranking.ranking_items}
                     ></RankingCard>
                 </Grid>
             ))}

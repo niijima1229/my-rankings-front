@@ -15,7 +15,12 @@ import dayjs from 'dayjs'
 import { Ranking } from 'types/ranking'
 import { useGetInitial } from 'hooks/initial'
 
-const RankingCard: FC<Ranking> = ({ title, user, createdAt, rankingItems }) => {
+const RankingCard: FC<Ranking> = ({
+    title,
+    user,
+    createdAt,
+    ranking_items,
+}) => {
     return (
         <Card
             sx={{
@@ -35,7 +40,7 @@ const RankingCard: FC<Ranking> = ({ title, user, createdAt, rankingItems }) => {
             />
             <CardContent sx={{ pt: 0 }}>
                 <Stack spacing={1}>
-                    {rankingItems.map((item) => (
+                    {ranking_items.map((item) => (
                         <Box key={item.id} sx={{ position: 'relative' }}>
                             <Box
                                 sx={{

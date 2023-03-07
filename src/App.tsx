@@ -38,7 +38,7 @@ import useAuth from 'hooks/auth'
 
 interface FormInputs {
     title: string
-    rankingItem: string[]
+    ranking_items: string[]
 }
 
 const drawerWidth = 240
@@ -100,17 +100,25 @@ const App: FC = () => {
         mode: 'onChange',
         defaultValues: {
             title: '',
-            rankingItem: ['', '', ''],
+            ranking_items: ['', '', ''],
         },
     })
 
     const onSubmit: any = (data: FormInputs) => {
-        const url = Config.apiUrl + '/ranking/create'
+        const url = Config.apiLoginUrl + '/rankings/create'
+        const token = localStorage.getItem('token') ?? ''
+        const headers = {
+            Authorization: `Bearer ${token}`,
+        }
         axios
-            .post(url, {
-                title: data.title,
-                rankingItem: data.rankingItem,
-            })
+            .post(
+                url,
+                {
+                    title: data.title,
+                    ranking_items: data.ranking_items,
+                },
+                { headers },
+            )
             .then(() => {
                 window.location.href = '/'
             })
@@ -285,32 +293,32 @@ const App: FC = () => {
                         <TextField
                             autoFocus
                             margin="dense"
-                            id="rankingItem1"
+                            id="ranking_items1"
                             label="１位"
                             type="text"
                             fullWidth
                             variant="standard"
-                            {...register('rankingItem.0', { required: true })}
+                            {...register('ranking_items.0', { required: true })}
                         />
                         <TextField
                             autoFocus
                             margin="dense"
-                            id="rankingItem2"
+                            id="ranking_items2"
                             label="２位"
                             type="text"
                             fullWidth
                             variant="standard"
-                            {...register('rankingItem.1', { required: true })}
+                            {...register('ranking_items.1', { required: true })}
                         />
                         <TextField
                             autoFocus
                             margin="dense"
-                            id="rankingItem3"
+                            id="ranking_items3"
                             label="３位"
                             type="text"
                             fullWidth
                             variant="standard"
-                            {...register('rankingItem.2', { required: true })}
+                            {...register('ranking_items.2', { required: true })}
                         />
                     </DialogContent>
                     <DialogActions>

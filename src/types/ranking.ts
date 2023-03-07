@@ -12,5 +12,5 @@ export interface Ranking {
     title: string
     user: User
     createdAt: string
-    rankingItems: RankingItem[]
+    ranking_items: RankingItem[]
 }
