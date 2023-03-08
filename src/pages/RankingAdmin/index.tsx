@@ -9,7 +9,7 @@ const MyPage: FC = () => {
 
     useEffect(() => {
         const getRankings: any = async () => {
-            const url = Config.apiUrl + '/my-rankings'
+            const url = Config.apiUrl + '/rankings/my-rankings'
             await axios
                 .get(url)
                 .then((response) => {
